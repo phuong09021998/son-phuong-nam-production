@@ -5,7 +5,7 @@ import styles from './Login.module.scss';
 import Button from '@material-ui/core/Button';
 import { loginUser, loginByGoogle, loginByFacebook } from 'redux/actions/users';
 import { connect } from 'react-redux';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import GoogleLogin from 'react-google-login';
 import { message } from 'antd';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -37,7 +37,7 @@ function Login({
   loginByFacebookError,
   loginByFacebook,
 }: Props) {
-  const router = useRouter();
+  // const router = useRouter();
   const [form, setForm] = useState({
     formError: false,
     formSuccess: '',
