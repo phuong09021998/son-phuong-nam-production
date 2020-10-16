@@ -2439,10 +2439,6 @@ var axios = __webpack_require__("euk0");
 // EXTERNAL MODULE: ./config/basedUrl.ts
 var basedUrl = __webpack_require__("8nVP");
 
-// EXTERNAL MODULE: external "local-storage"
-var external_local_storage_ = __webpack_require__("v5Jk");
-var external_local_storage_default = /*#__PURE__*/__webpack_require__.n(external_local_storage_);
-
 // CONCATENATED MODULE: ./components/ClientChatBubble/index.tsx
 var ClientChatBubble_jsx = external_react_default.a.createElement;
 
@@ -2456,15 +2452,14 @@ var ClientChatBubble_jsx = external_react_default.a.createElement;
 
 
 
-
- // @ts-ignore
-
-const token = external_local_storage_default.a.get('spn_auth');
-const header = {
-  headers: {
-    'Authorization': 'Bearer ' + token
-  }
-};
+ // import localstorage from 'local-storage';
+// // @ts-ignore
+// const token = localstorage.get('spn_auth')
+// const header = {
+//   headers: {
+//     'Authorization': 'Bearer ' + token
+//   }
+// }
 
 function ChatBubble({
   openChatBubble,
@@ -2534,21 +2529,24 @@ function ChatBubble({
       });
 
       try {
-        setTimeout(() => {
-          axios["a" /* default */].post('/messages', {
-            roomId: user._id
-          }, header).then(res => {
-            if (res.data.messages.length) {
-              setMessages(res.data.messages); // console.log(res.data.messages);
-            } else {
-              // @ts-ignore
-              socketRef.current.emit('Initialize Chat', {
-                roomId: user._id,
-                roomName: user.name
-              });
-            }
-          });
-        }, 1000);
+        // setTimeout(() => {
+        axios["a" /* default */].post('/messages', {
+          roomId: user._id
+        }, {
+          headers: {
+            'Authorization': 'Bearer ' + user.token
+          }
+        }).then(res => {
+          if (res.data.messages.length) {
+            setMessages(res.data.messages); // console.log(res.data.messages);
+          } else {
+            // @ts-ignore
+            socketRef.current.emit('Initialize Chat', {
+              roomId: user._id,
+              roomName: user.name
+            });
+          }
+        }); // }, 1000)
       } catch (error) {
         external_antd_["message"].error(error.response.error);
       } // @ts-ignore
@@ -2576,7 +2574,11 @@ function ChatBubble({
       socketRef.current.on('Set Seen', () => {
         axios["a" /* default */].post('/messages', {
           roomId: user._id
-        }, header).then(res => {
+        }, {
+          headers: {
+            'Authorization': 'Bearer ' + user.token
+          }
+        }).then(res => {
           setMessages(res.data.messages);
         });
       });

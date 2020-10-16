@@ -65,8 +65,8 @@ function ShopItem({ productData, siteInfo, toggleChatBubble }: any) {
           <div className={styles.priceWrapper}>
             <div className={styles.title}> Giá:</div>
             <div className={styles.price}>
-              {productData.salePrice && <span>{currencyFormatter.format(productData.price, {code: 'VND'})}</span>}{' '}
-              {productData.salePrice ? currencyFormatter.format(productData.salePrice, {code: 'VND'}) : currencyFormatter.format(productData.price, {code: 'VND'})}
+              {productData.salePrice && <span>{currencyFormatter.format(productData.price, { code: 'VND' })}</span>}{' '}
+              {productData.salePrice ? currencyFormatter.format(productData.salePrice, { code: 'VND' }) : currencyFormatter.format(productData.price, { code: 'VND' })}
             </div>
           </div>
           {/* <div className={styles.quantity}>
@@ -91,10 +91,10 @@ function ShopItem({ productData, siteInfo, toggleChatBubble }: any) {
               className={styles.button}
               onClick={() => handleOpenChat()}
             >
-               LIÊN HỆ
+              LIÊN HỆ
                 <div className={styles.icon}>
-                  <img src="/icons/live-chat.svg" alt="chat"/>
-                </div>
+                <img src="/icons/live-chat.svg" alt="chat" />
+              </div>
             </Button>
           </div>
         </div>
@@ -125,7 +125,7 @@ export async function getStaticPaths() {
   // console.log(paths.data.paths);
   return {
     paths: paths.data.paths,
-    fallback: false,
+    fallback: true,
   };
 }
 
@@ -142,4 +142,4 @@ export async function getStaticProps({ params }: any) {
   };
 }
 
-export default connect(null, {toggleChatBubble})(ShopItem)
+export default connect(null, { toggleChatBubble })(ShopItem)

@@ -110,7 +110,11 @@ function ChatBubble({ openChatBubble, toggleChatBubble, user, toggleRegisterLogi
       });
       // @ts-ignore
       socketRef.current.on('Set Seen', () => {
-        axios.post('/messages', { roomId: user._id }, header).then((res) => {
+        axios.post('/messages', { roomId: user._id }, {
+          headers: {
+            'Authorization': 'Bearer ' + user.token
+          }
+        }).then((res) => {
           setMessages(res.data.messages);
         });
       });
