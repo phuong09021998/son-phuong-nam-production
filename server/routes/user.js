@@ -5,7 +5,7 @@ const checkAdmin = require('../middlewares/admin');
 
 const {
   readUser,
-  createUser,
+  // createUser,
   getAvatar,
   updateUser,
   loginUser,
@@ -24,7 +24,7 @@ const {
 // User routes
 router.get('/user', auth, readUser);
 router.get('/user/avatar', auth, getAvatar);
-router.post('/user', createUser);
+// router.post('/user', createUser);
 router.post('/user/login', loginUser);
 router.post('/user/cart', auth, addToCart);
 router.put('/user', auth, updateUser);

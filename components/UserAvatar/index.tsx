@@ -3,13 +3,21 @@ import axios from 'config/axios';
 import styles from './UserAvatar.module.scss';
 import { Skeleton } from 'antd';
 import { Avatar } from 'antd';
-import baseUrl from 'config/basedUrl'
+import baseUrl from 'config/basedUrl';
+import localStorage from 'local-storage';
+// @ts-ignore
+const token = localStorage.get('spn_auth')
+const header = {
+  headers: {
+    'Authorization': 'Bearer ' + token
+  }
+}
 
 function UserAvatar({ userId }: any) {
   const [user, setUser] = useState();
 
   useEffect(() => {
-    axios.get(`/user/${userId}/`).then((res) => setUser(res.data.user));
+    axios.get(`/user/${userId}/`, header).then((res) => setUser(res.data.user));
   }, []);
 
   if (!user) {

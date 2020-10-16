@@ -20,58 +20,58 @@ exports.readUser = (req, res) => {
   });
 };
 
-exports.createUser = (req, res) => {
-  const form = formidable({ multiples: true });
-  form.parse(req, async (err, fields, files) => {
-    if (err) {
-      return res.status(400).send({
-        success: false,
-        error: err.message,
-      });
-    }
+// exports.createUser = (req, res) => {
+//   const form = formidable({ multiples: true });
+//   form.parse(req, async (err, fields, files) => {
+//     if (err) {
+//       return res.status(400).send({
+//         success: false,
+//         error: err.message,
+//       });
+//     }
 
-    let user = new User(fields);
+//     let user = new User(fields);
 
-    if (files.avatar) {
-      if (!/\.(jpe?g|png|gif|bmp)$/i.test(files.avatar.name)) {
-        return res.status(200).send({
-          success: false,
-          error: 'You must upload an image.',
-        });
-      }
-      if (files.avatar.size > 5000000) {
-        return res.status(200).send({
-          success: false,
-          error: 'Image cannot be larger than 5Mb.',
-        });
-      }
-      user.avatar = await handleUploadImage(files.avatar, { width: 250, height: 250 });
-    }
+//     if (files.avatar) {
+//       if (!/\.(jpe?g|png|gif|bmp)$/i.test(files.avatar.name)) {
+//         return res.status(200).send({
+//           success: false,
+//           error: 'You must upload an image.',
+//         });
+//       }
+//       if (files.avatar.size > 5000000) {
+//         return res.status(200).send({
+//           success: false,
+//           error: 'Image cannot be larger than 5Mb.',
+//         });
+//       }
+//       user.avatar = await handleUploadImage(files.avatar, { width: 250, height: 250 });
+//     }
 
-    try {
-      if (user.role !== 0) {
-        throw new Error('You are not authorized to create a moderator.');
-      }
+//     try {
+//       if (user.role !== 0) {
+//         throw new Error('You are not authorized to create a moderator.');
+//       }
 
-      if (!user.token) {
-        user.generateToken();
-      }
+//       if (!user.token) {
+//         user.generateToken();
+//       }
 
-      const doc = await user.save();
-      doc.avatar = undefined;
-      doc.password = undefined;
-      return res.cookie('spn_auth', user.token).status(200).send({
-        success: true,
-        user: doc,
-      });
-    } catch (error) {
-      return res.status(400).send({
-        success: false,
-        error: error.message,
-      });
-    }
-  });
-};
+//       const doc = await user.save();
+//       doc.avatar = undefined;
+//       doc.password = undefined;
+//       return res.cookie('spn_auth', user.token).status(200).send({
+//         success: true,
+//         user: doc,
+//       });
+//     } catch (error) {
+//       return res.status(400).send({
+//         success: false,
+//         error: error.message,
+//       });
+//     }
+//   });
+// };
 
 exports.createUserByAdmin = (req, res) => {
   const form = formidable({ multiples: true });
@@ -208,7 +208,6 @@ exports.loginUser = async (req, res) => {
     user.password = undefined;
     
     return res
-      .cookie('spn_auth', user.token, { maxAge: 900000, httpOnly: true })
       .status(200)
       .send({
         success: true,

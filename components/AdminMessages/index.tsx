@@ -13,7 +13,15 @@ import io from 'socket.io-client';
 import { toggleChatBubble } from 'redux/actions/ui';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import baseUrl from 'config/basedUrl'
+import baseUrl from 'config/basedUrl';
+import localStorage from 'local-storage';
+// @ts-ignore
+const token = localStorage.get('spn_auth')
+const header = {
+  headers: {
+    'Authorization': 'Bearer ' + token
+  }
+}
 
 function AdminMessages({ toggleChatBubble, openChatWindow }: any) {
   const [messages, setMessages] = useState([]);
@@ -38,7 +46,10 @@ function AdminMessages({ toggleChatBubble, openChatWindow }: any) {
     // @ts-ignore
     socketRef.current.emit('Login', { userId: 'Admin' });
 
-    axios.get('/messages/admin').then((res: any) => {
+ 
+    
+
+    axios.get('/messages/admin', header).then((res: any) => {
       if (res.data.lastChatMessages.length) {
         // setMessages(res.data.lastChatMessages);
         setMessages(sortMessages(res.data.lastChatMessages));
@@ -123,7 +134,7 @@ function AdminMessages({ toggleChatBubble, openChatWindow }: any) {
   const handleLoadMessages = () => {
     // console.log('load messages');
     setOpenNontification(false);
-    axios.get('/messages/admin').then((res: any) => {
+    axios.get('/messages/admin', header).then((res: any) => {
       if (res.data.lastChatMessages.length) {
         // setMessages(res.data.lastChatMessages);
         setMessages(sortMessages(res.data.lastChatMessages));
@@ -141,7 +152,7 @@ function AdminMessages({ toggleChatBubble, openChatWindow }: any) {
       setOnline(activeUsers.includes(currentRoomInfo.roomId));
       // @ts-ignore
       socketRef.current.on('Set Seen', () => {
-        axios.post('/messages', { roomId: currentRoomInfo.roomId }).then((res) => {
+        axios.post('/messages', { roomId: currentRoomInfo.roomId }, header).then((res) => {
           setCurrentMessages(res.data.messages);
         });
       });
