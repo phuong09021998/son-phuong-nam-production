@@ -11,6 +11,8 @@ import { message } from 'antd';
 import CircularProgress from '@material-ui/core/CircularProgress';
 // @ts-ignore
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import { toggleRegisterLogin } from 'redux/actions/ui';
+
 interface Props {
   loginUser(data: DataSubmit): any;
   user: any;
@@ -20,6 +22,7 @@ interface Props {
   loginUserError: any;
   loginByFacebookError: any;
   loginByFacebook: any;
+  toggleRegisterLogin: any;
 }
 
 interface DataSubmit {
@@ -36,6 +39,7 @@ function Login({
   loginUserError,
   loginByFacebookError,
   loginByFacebook,
+  toggleRegisterLogin
 }: Props) {
   // const router = useRouter();
   const [form, setForm] = useState({
@@ -143,7 +147,7 @@ function Login({
       if (user.role > 0) {
         // document.cookie = `spn_auth=${user.token}`
         localStorage.setItem('spn_auth', user.token)
-        
+        toggleRegisterLogin(false, 'none');
       } else {
         close();
       }
@@ -276,4 +280,4 @@ const mapStateToProps = (state: any) => ({
   loginUserError: state.users.loginUserError,
 });
 
-export default connect(mapStateToProps, { loginUser, loginByGoogle, loginByFacebook })(Login);
+export default connect(mapStateToProps, { loginUser, toggleRegisterLogin, loginByGoogle, loginByFacebook })(Login);
