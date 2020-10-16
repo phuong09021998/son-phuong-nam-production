@@ -1,0 +1,1 @@
+{"ast":null,"code":"var baseURL = \"https://data.epoxyphuongnam.com\"; // const baseURL = \"http://localhost:3000\"\n\nexport default baseURL;","map":null,"metadata":{},"sourceType":"module"}
