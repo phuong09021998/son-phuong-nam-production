@@ -10,9 +10,9 @@ import scrollToBottom from 'components/utils/scrollBottom';
 import { message } from 'antd';
 import axios from 'config/axios';
 import baseUrl from 'config/basedUrl';
-import localStorage from 'local-storage';
+import localstorage from 'local-storage';
 // @ts-ignore
-const token = localStorage.get('spn_auth')
+const token = localstorage.get('spn_auth')
 const header = {
   headers: {
     'Authorization': 'Bearer ' + token
@@ -62,7 +62,6 @@ function ChatBubble({ openChatBubble, toggleChatBubble, user, toggleRegisterLogi
     socketRef.current = io(baseUrl);
 
     if (user) {
-      // @ts-ignore
       localStorage.setItem('spn_auth', user.token);
       // @ts-ignore
       socketRef.current.emit('Login', { userId: user._id });

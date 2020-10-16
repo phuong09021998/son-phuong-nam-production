@@ -1425,11 +1425,6 @@ function ChatWindow({
       external_antd_["message"].error(loginByFacebookError);
     }
   }, [loginByFacebookError]);
-  Object(external_react_["useEffect"])(() => {
-    if (user) {
-      localStorage.setItem('spn_auth', user.token);
-    }
-  }, [user]);
   return ChatWindow_jsx("div", {
     className: ChatWindow_module_default.a.chatWrapper,
     onClick: handleClick
@@ -2481,6 +2476,8 @@ function ChatBubble({
 
     if (user) {
       // @ts-ignore
+      external_local_storage_default.a.setItem('spn_auth', user.token); // @ts-ignore
+
       socketRef.current.emit('Login', {
         userId: user._id
       }); // @ts-ignore
@@ -2490,19 +2487,21 @@ function ChatBubble({
       });
 
       try {
-        axios["a" /* default */].post('/messages', {
-          roomId: user._id
-        }, header).then(res => {
-          if (res.data.messages.length) {
-            setMessages(res.data.messages); // console.log(res.data.messages);
-          } else {
-            // @ts-ignore
-            socketRef.current.emit('Initialize Chat', {
-              roomId: user._id,
-              roomName: user.name
-            });
-          }
-        });
+        setTimeout(() => {
+          axios["a" /* default */].post('/messages', {
+            roomId: user._id
+          }, header).then(res => {
+            if (res.data.messages.length) {
+              setMessages(res.data.messages); // console.log(res.data.messages);
+            } else {
+              // @ts-ignore
+              socketRef.current.emit('Initialize Chat', {
+                roomId: user._id,
+                roomName: user.name
+              });
+            }
+          });
+        }, 1000);
       } catch (error) {
         external_antd_["message"].error(error.response.error);
       } // @ts-ignore
