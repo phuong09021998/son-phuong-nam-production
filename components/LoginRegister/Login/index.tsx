@@ -143,10 +143,6 @@ function Login({
       if (user.role > 0) {
         // document.cookie = `spn_auth=${user.token}`
         localStorage.setItem('spn_auth', user.token)
-        // console.log(user)
-        setTimeout(() => {
-          router.push('/admin');
-        }, 1000)
         
       } else {
         close();
