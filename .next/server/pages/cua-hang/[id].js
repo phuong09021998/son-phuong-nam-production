@@ -4934,7 +4934,7 @@ async function getStaticPaths() {
 
   return {
     paths: paths.data.paths,
-    fallback: false
+    fallback: true
   };
 }
 async function getStaticProps({

@@ -11,8 +11,13 @@ import currencyFormatter from 'currency-formatter'
 import { toggleChatBubble } from 'redux/actions/ui';
 import { connect } from 'react-redux'
 import baseUrl from 'config/basedUrl'
+import { useRouter } from 'next/router'
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />;
 
 function ShopItem({ productData, siteInfo, toggleChatBubble }: any) {
+  const router = useRouter()
   const [openModal, setOpenModal] = useState(false);
 
   const customStyles = {
@@ -43,6 +48,18 @@ function ShopItem({ productData, siteInfo, toggleChatBubble }: any) {
     toggleChatBubble(true)
   }
   // console.log(productData);
+  if (router.isFallback) {
+    return <div
+      style={{
+        width: '100%',
+        marginTop: '10em',
+        textAlign: 'center',
+      }}
+    >
+      <Spin indicator={antIcon} />
+    </div>
+  }
+
   return (
     <MainLayout title={productData.name} contacts={siteInfo}>
       <GreenBackground name="Cửa hàng" breadcrumb={`Trang chủ / Cửa hàng / ${productData.name}`} />

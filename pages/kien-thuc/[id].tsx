@@ -3,8 +3,25 @@ import axios from 'config/axios';
 import MainLayout from 'layouts/MainLayout';
 import Post from 'components/Post';
 import RelatedPost from 'components/RelatedPost';
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/router';
+const antIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />;
 
 export default function ServiceDetail({ postData, siteInfo, projects }: any) {
+  const router = useRouter()
+  // console.log(postData);
+  if (router.isFallback) {
+    return <div
+      style={{
+        width: '100%',
+        marginTop: '10em',
+        textAlign: 'center',
+      }}
+    >
+      <Spin indicator={antIcon} />
+    </div>
+  }
   // console.log(postData);
   return (
     <MainLayout title={`${postData.title}`} contacts={siteInfo}>
