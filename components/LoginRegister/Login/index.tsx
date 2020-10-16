@@ -113,7 +113,7 @@ function Login({
   };
 
   const responseGoogle = (data: any) => {
-    console.log(data)
+    // console.log(data)
     loginByGoogle({
       token: data.tokenId,
       name: data.profileObj.name,
@@ -145,9 +145,10 @@ function Login({
 
   useEffect(() => {
     if (user) {
+      localStorage.setItem('spn_auth', user.token)
       if (user.role > 0) {
         // document.cookie = `spn_auth=${user.token}`
-        localStorage.setItem('spn_auth', user.token)
+
         toggleRegisterLogin(false, 'none');
       } else {
         close();

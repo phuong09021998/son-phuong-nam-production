@@ -68,7 +68,7 @@ function ChatBubble({ openChatBubble, toggleChatBubble, user, toggleRegisterLogi
       socketRef.current.emit('Join room', { roomId: user._id });
 
       try {
-        axios.post('/messages', { roomId: user._id }).then((res) => {
+        axios.post('/messages', { roomId: user._id }, header).then((res) => {
           if (res.data.messages.length) {
             setMessages(res.data.messages);
             // console.log(res.data.messages);
@@ -138,10 +138,10 @@ function ChatBubble({ openChatBubble, toggleChatBubble, user, toggleRegisterLogi
           handleClick={handleSetSeen}
         />
       ) : (
-        <div className={styles.icon} onClick={handleOpenChat}>
-          <img src="/icons/chat.svg" alt="chat" />
-        </div>
-      )}
+          <div className={styles.icon} onClick={handleOpenChat}>
+            <img src="/icons/chat.svg" alt="chat" />
+          </div>
+        )}
     </React.Fragment>
   );
 }

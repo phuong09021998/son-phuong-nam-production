@@ -60,7 +60,7 @@ function ChatWindow({
   };
 
   const responseGoogle = (data: any) => {
-    console.log(data)
+    // console.log(data)
     loginByGoogle({
       token: data.tokenId,
       name: data.profileObj.name,
@@ -92,11 +92,11 @@ function ChatWindow({
               {lastSeenIndex === i && <div className={styles.seen}> ✓ Đã xem</div>}
             </div>
           ) : (
-            <div key={i}>
-              {renderTime(i)}
-              <div className={styles.senderText}>{item.message}</div>
-            </div>
-          );
+              <div key={i}>
+                {renderTime(i)}
+                <div className={styles.senderText}>{item.message}</div>
+              </div>
+            );
         } else {
           return item.sender === 'Admin' ? (
             <div key={i}>
@@ -104,12 +104,12 @@ function ChatWindow({
               <div className={styles.senderText}>{item.message}</div>
             </div>
           ) : (
-            <div key={i}>
-              {renderTime(i)}
-              <div className={styles.normalText}>{item.message}</div>
-              {lastSeenIndex === i && <div className={styles.seen}> ✓ Đã xem</div>}
-            </div>
-          );
+              <div key={i}>
+                {renderTime(i)}
+                <div className={styles.normalText}>{item.message}</div>
+                {lastSeenIndex === i && <div className={styles.seen}> ✓ Đã xem</div>}
+              </div>
+            );
         }
       }
     });
@@ -124,6 +124,12 @@ function ChatWindow({
       message.error(loginByFacebookError);
     }
   }, [loginByFacebookError]);
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('spn_auth', user.token)
+    }
+  }, [user])
   return (
     <div className={styles.chatWrapper} onClick={handleClick}>
       <div className={styles.top}>
@@ -145,9 +151,9 @@ function ChatWindow({
                 />
               </div>
             ) : (
-              // @ts-ignore
-              <UserAvatar userId={roomInfo.roomId} />
-            )}
+                // @ts-ignore
+                <UserAvatar userId={roomInfo.roomId} />
+              )}
 
             <div className={styles.dot}></div>
           </div>
@@ -155,13 +161,13 @@ function ChatWindow({
             {typeof roomInfo === 'boolean' ? (
               <div className={styles.name}>Admin</div>
             ) : (
-              <div className={styles.name}>{roomInfo.roomName}</div>
-            )}
+                <div className={styles.name}>{roomInfo.roomName}</div>
+              )}
             {isOnline ? (
               <div className={styles.status}>online</div>
             ) : (
-              <div className={styles.statusOffline}>offline</div>
-            )}
+                <div className={styles.statusOffline}>offline</div>
+              )}
           </div>
         </div>
         <div className={styles.close} onClick={handleCloseChat}>
@@ -206,40 +212,40 @@ function ChatWindow({
           </div>
         </>
       ) : (
-        <div className={styles.requireLogin}>
-          Bạn phải đăng nhập để chat!
-          <br/>
-          <GoogleLogin
-          clientId="374918945235-8gdpha6da5h9sqva4mgi53ldreces79b.apps.googleusercontent.com"
-          render={(renderProps) => (
-            <div className={styles.item} onClick={renderProps.onClick}>
-              <div className={styles.icon}>
-                <img src="/icons/google.svg" alt="google" />
-              </div>
-              <div className={styles.text}>Đăng nhập bằng Google</div>
-            </div>
-          )}
-          buttonText="Login"
-          onSuccess={responseGoogle}
-          onFailure={responseGoogle}
-          cookiePolicy={'single_host_origin'}
-        />
-        <FacebookLogin
-          appId="659986671317584"
-          // autoLoad
-          fields="name,email,picture,id"
-          callback={responseFacebook}
-          render={(renderProps: any) => (
-            <div className={styles.item} onClick={renderProps.onClick}>
-              <div className={styles.icon}>
-                <img src="/icons/facebook.svg" alt="facebook" />
-              </div>
-              <div className={styles.text}>Đăng nhập bằng Facebook</div>
-            </div>
-          )}
-        />
-        </div>
-      )}
+          <div className={styles.requireLogin}>
+            Bạn phải đăng nhập để chat!
+            <br />
+            <GoogleLogin
+              clientId="374918945235-8gdpha6da5h9sqva4mgi53ldreces79b.apps.googleusercontent.com"
+              render={(renderProps) => (
+                <div className={styles.item} onClick={renderProps.onClick}>
+                  <div className={styles.icon}>
+                    <img src="/icons/google.svg" alt="google" />
+                  </div>
+                  <div className={styles.text}>Đăng nhập bằng Google</div>
+                </div>
+              )}
+              buttonText="Login"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={'single_host_origin'}
+            />
+            <FacebookLogin
+              appId="659986671317584"
+              // autoLoad
+              fields="name,email,picture,id"
+              callback={responseFacebook}
+              render={(renderProps: any) => (
+                <div className={styles.item} onClick={renderProps.onClick}>
+                  <div className={styles.icon}>
+                    <img src="/icons/facebook.svg" alt="facebook" />
+                  </div>
+                  <div className={styles.text}>Đăng nhập bằng Facebook</div>
+                </div>
+              )}
+            />
+          </div>
+        )}
     </div>
   );
 }
@@ -247,6 +253,7 @@ function ChatWindow({
 const mapStateToProps = (state: any) => ({
   loginByGoogleError: state.users.loginByGoogleError,
   loginByFacebookError: state.users.loginByFacebookError,
+  user: state.users.data,
 });
 
 export default connect(mapStateToProps, { loginByGoogle, loginByFacebook })(ChatWindow)
