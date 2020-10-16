@@ -63,20 +63,25 @@ function ChatBubble({ openChatBubble, toggleChatBubble, user, toggleRegisterLogi
 
     if (user) {
       // @ts-ignore
+      localStorage.setItem('spn_auth', user.token);
+      // @ts-ignore
       socketRef.current.emit('Login', { userId: user._id });
       // @ts-ignore
       socketRef.current.emit('Join room', { roomId: user._id });
 
       try {
-        axios.post('/messages', { roomId: user._id }, header).then((res) => {
-          if (res.data.messages.length) {
-            setMessages(res.data.messages);
-            // console.log(res.data.messages);
-          } else {
-            // @ts-ignore
-            socketRef.current.emit('Initialize Chat', { roomId: user._id, roomName: user.name });
-          }
-        });
+        setTimeout(() => {
+          axios.post('/messages', { roomId: user._id }, header).then((res) => {
+            if (res.data.messages.length) {
+              setMessages(res.data.messages);
+              // console.log(res.data.messages);
+            } else {
+              // @ts-ignore
+              socketRef.current.emit('Initialize Chat', { roomId: user._id, roomName: user.name });
+            }
+          });
+        }, 1000)
+
       } catch (error) {
         message.error(error.response.error);
       }

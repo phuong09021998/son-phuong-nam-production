@@ -124,12 +124,6 @@ function ChatWindow({
       message.error(loginByFacebookError);
     }
   }, [loginByFacebookError]);
-
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem('spn_auth', user.token)
-    }
-  }, [user])
   return (
     <div className={styles.chatWrapper} onClick={handleClick}>
       <div className={styles.top}>

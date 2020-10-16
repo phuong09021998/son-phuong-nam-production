@@ -1334,7 +1334,7 @@ function ChatWindow({
   };
 
   const responseGoogle = data => {
-    console.log(data);
+    // console.log(data)
     loginByGoogle({
       token: data.tokenId,
       name: data.profileObj.name,
@@ -1395,6 +1395,11 @@ function ChatWindow({
       external_antd_["message"].error(loginByFacebookError);
     }
   }, [loginByFacebookError]);
+  Object(external_react_["useEffect"])(() => {
+    if (user) {
+      localStorage.setItem('spn_auth', user.token);
+    }
+  }, [user]);
   return ChatWindow_jsx("div", {
     className: ChatWindow_module_default.a.chatWrapper,
     onClick: handleClick
@@ -1497,7 +1502,8 @@ function ChatWindow({
 
 const mapStateToProps = state => ({
   loginByGoogleError: state.users.loginByGoogleError,
-  loginByFacebookError: state.users.loginByFacebookError
+  loginByFacebookError: state.users.loginByFacebookError,
+  user: state.users.data
 });
 
 /* harmony default export */ var components_ChatWindow = __webpack_exports__["a"] = (Object(external_react_redux_["connect"])(mapStateToProps, {
@@ -2216,7 +2222,7 @@ function Login({
   };
 
   const responseGoogle = data => {
-    console.log(data);
+    // console.log(data)
     loginByGoogle({
       token: data.tokenId,
       name: data.profileObj.name,
@@ -2249,9 +2255,10 @@ function Login({
 
   Object(external_react_["useEffect"])(() => {
     if (user) {
+      localStorage.setItem('spn_auth', user.token);
+
       if (user.role > 0) {
         // document.cookie = `spn_auth=${user.token}`
-        localStorage.setItem('spn_auth', user.token);
         toggleRegisterLogin(false, 'none');
       } else {
         close();
@@ -2582,7 +2589,7 @@ function ChatBubble({
       try {
         axios["a" /* default */].post('/messages', {
           roomId: user._id
-        }).then(res => {
+        }, header).then(res => {
           if (res.data.messages.length) {
             setMessages(res.data.messages); // console.log(res.data.messages);
           } else {
