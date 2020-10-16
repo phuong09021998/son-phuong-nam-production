@@ -2553,8 +2553,7 @@ function ChatBubble({
     socketRef.current = external_socket_io_client_default()(basedUrl["a" /* default */]);
 
     if (user) {
-      // @ts-ignore
-      external_local_storage_default.a.setItem('spn_auth', user.token); // @ts-ignore
+      localStorage.setItem('spn_auth', user.token); // @ts-ignore
 
       socketRef.current.emit('Login', {
         userId: user._id

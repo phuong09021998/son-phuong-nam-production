@@ -10,14 +10,14 @@ import scrollToBottom from 'components/utils/scrollBottom';
 import { message } from 'antd';
 import axios from 'config/axios';
 import baseUrl from 'config/basedUrl';
-import localstorage from 'local-storage';
-// @ts-ignore
-const token = localstorage.get('spn_auth')
-const header = {
-  headers: {
-    'Authorization': 'Bearer ' + token
-  }
-}
+// import localstorage from 'local-storage';
+// // @ts-ignore
+// const token = localstorage.get('spn_auth')
+// const header = {
+//   headers: {
+//     'Authorization': 'Bearer ' + token
+//   }
+// }
 
 function ChatBubble({ openChatBubble, toggleChatBubble, user, toggleRegisterLogin }: any) {
   const [messages, setMessages] = useState([]);
@@ -69,17 +69,21 @@ function ChatBubble({ openChatBubble, toggleChatBubble, user, toggleRegisterLogi
       socketRef.current.emit('Join room', { roomId: user._id });
 
       try {
-        setTimeout(() => {
-          axios.post('/messages', { roomId: user._id }, header).then((res) => {
-            if (res.data.messages.length) {
-              setMessages(res.data.messages);
-              // console.log(res.data.messages);
-            } else {
-              // @ts-ignore
-              socketRef.current.emit('Initialize Chat', { roomId: user._id, roomName: user.name });
-            }
-          });
-        }, 1000)
+        // setTimeout(() => {
+        axios.post('/messages', { roomId: user._id }, {
+          headers: {
+            'Authorization': 'Bearer ' + user.token
+          }
+        }).then((res) => {
+          if (res.data.messages.length) {
+            setMessages(res.data.messages);
+            // console.log(res.data.messages);
+          } else {
+            // @ts-ignore
+            socketRef.current.emit('Initialize Chat', { roomId: user._id, roomName: user.name });
+          }
+        });
+        // }, 1000)
 
       } catch (error) {
         message.error(error.response.error);
