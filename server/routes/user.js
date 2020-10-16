@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middlewares/auth');
 const checkAdmin = require('../middlewares/admin');
+const moderator = require('../middlewares/moderator');
 
 const {
   readUser,
@@ -34,7 +35,7 @@ router.post('/user/login/facebook', loginByFacebook);
 
 // Admin routes
 router.get('/users', auth, checkAdmin, getAllUsers);
-router.get('/user/:userId', auth, checkAdmin, getUserById);
+router.get('/user/:userId', auth, moderator, getUserById);
 router.post('/admin/user', auth, checkAdmin, createUserByAdmin);
 router.put('/user/:userId', auth, checkAdmin, updateUserById);
 router.delete('/user/:userId', auth, checkAdmin, deleteUserById);

@@ -113,6 +113,7 @@ function Login({
   };
 
   const responseGoogle = (data: any) => {
+    console.log(data)
     loginByGoogle({
       token: data.tokenId,
       name: data.profileObj.name,

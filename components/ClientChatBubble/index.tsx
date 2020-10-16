@@ -10,6 +10,14 @@ import scrollToBottom from 'components/utils/scrollBottom';
 import { message } from 'antd';
 import axios from 'config/axios';
 import baseUrl from 'config/basedUrl';
+import localStorage from 'local-storage';
+// @ts-ignore
+const token = localStorage.get('spn_auth')
+const header = {
+  headers: {
+    'Authorization': 'Bearer ' + token
+  }
+}
 
 function ChatBubble({ openChatBubble, toggleChatBubble, user, toggleRegisterLogin }: any) {
   const [messages, setMessages] = useState([]);
@@ -94,7 +102,7 @@ function ChatBubble({ openChatBubble, toggleChatBubble, user, toggleRegisterLogi
       });
       // @ts-ignore
       socketRef.current.on('Set Seen', () => {
-        axios.post('/messages', { roomId: user._id }).then((res) => {
+        axios.post('/messages', { roomId: user._id }, header).then((res) => {
           setMessages(res.data.messages);
         });
       });
